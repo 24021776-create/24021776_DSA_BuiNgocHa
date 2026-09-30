@@ -12,7 +12,7 @@ int main() {
         cin >> a;
         sum += a;
     }
-
+// độ phức tạp O(n)
     cout << sum << endl;
 
     return 0;
