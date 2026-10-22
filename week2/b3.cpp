@@ -1,87 +1,81 @@
+
 #include <iostream>
 using namespace std;
 
-struct DNode {
+struct Node{
     int data;
-    DNode* prev;
-    DNode* next;
+    Node *prev,*next;
 };
 
-class DoublyLinkedList {
-private:
-    DNode* head;
-    DNode* tail;
+Node *head=NULL,*tail=NULL;
 
-public:
-    DoublyLinkedList() : head(nullptr), tail(nullptr) {}
+void insert(int x,int k){
+    Node *p=new Node{x,NULL,NULL};
+    if(k==0){
+        p->next=head;
+        if(head!=NULL) head->prev=p;
+        else tail=p;
+        head=p;
+        return;
+    }
+    Node *q=head;
+    for(int i=0;i<k-1&&q!=NULL;i++) q=q->next;
+    if(q==NULL){
+        cout<<"Vi tri khong hop le!\n";
+        delete p;
+        return;
+    }
+    p->next=q->next;
+    p->prev=q;
+    if(q->next!=NULL) q->next->prev=p;
+    else tail=p;
+    q->next=p;
+}
+// O(n)
 
-    // 1. Chèn vào đầu danh sách - O(1)
-    void insertHead(int x) {
-        DNode* p = new DNode{x, nullptr, head};
-        if (head == nullptr) {
-            head = tail = p;
-        } else {
-            head->prev = p;
-            head = p;
+void remove(int k){
+    Node *p=head;
+    for(int i=0;i<k&&p!=NULL;i++) p=p->next;
+    if(p==NULL){
+        cout<<"Vi tri khong hop le!\n";
+        return;
+    }
+    if(p->prev!=NULL) p->prev->next=p->next;
+    else head=p->next;
+    if(p->next!=NULL) p->next->prev=p->prev;
+    else tail=p->prev;
+    delete p;
+}
+// O(n)
+
+void display(){
+    Node *p=head;
+    while(p!=NULL){
+        cout<<p->data<<" ";
+        p=p->next;
+    }
+    cout<<endl;
+}
+// O(n)
+
+int main(){
+    int ch,x,k;
+    do{
+        cout<<"1. Them\n2. Xoa\n3. Hien thi\n0. Thoat\n";
+        cin>>ch;
+        if(ch==1){
+            cout<<"Nhap gia tri va vi tri: ";
+            cin>>x>>k;
+            if(k<0) cout<<"Vi tri khong hop le!\n";
+            else insert(x,k);
         }
-    }
-
-    // 2. Chèn vào cuối danh sách - O(1) (Nhờ có con trỏ tail)
-    void insertTail(int x) {
-        DNode* p = new DNode{x, tail, nullptr};
-        if (tail == nullptr) {
-            head = tail = p;
-        } else {
-            tail->next = p;
-            tail = p;
+        else if(ch==2){
+            cout<<"Nhap vi tri can xoa: ";
+            cin>>k;
+            if(k<0) cout<<"Vi tri khong hop le!\n";
+            else remove(k);
         }
-    }
-
-    // 3. Xóa ở đầu danh sách - O(1)
-    void deleteHead() {
-        if (head == nullptr) return;
-        DNode* p = head;
-        head = head->next;
-        if (head != nullptr) head->prev = nullptr;
-        else tail = nullptr; // Danh sách trở thành rỗng
-        delete p;
-    }
-
-    // 4. Xóa ở cuối danh sách - O(1)
-    void deleteTail() {
-        if (tail == nullptr) return;
-        DNode* p = tail;
-        tail = tail->prev;
-        if (tail != nullptr) tail->next = nullptr;
-        else head = nullptr; // Danh sách trở thành rỗng
-        delete p;
-    }
-
-    // 5. Xóa một Node biết trước địa chỉ con trỏ p - O(1)
-    void deleteNode(DNode* p) {
-        if (p == nullptr) return;
-        if (p == head) { deleteHead(); return; }
-        if (p == tail) { deleteTail(); return; }
-        p->prev->next = p->next;
-        p->next->prev = p->prev;
-        delete p;
-    }
-
-    // 6. In từ đầu đến cuối (Forward) - O(n)
-    void displayForward() {
-        for (DNode* p = head; p != nullptr; p = p->next)
-            cout << p->data << " ";
-        cout << "\n";
-    }
-
-    // 7. In ngược từ cuối lên đầu (Backward) - O(n)
-    void displayBackward() {
-        for (DNode* p = tail; p != nullptr; p = p->prev)
-            cout << p->data << " ";
-        cout << "\n";
-    }
-
-    ~DoublyLinkedList() {
-        while (head != nullptr) deleteHead();
-    }
-};
+        else if(ch==3) display();
+    }while(ch!=0);
+    return 0;
+}
