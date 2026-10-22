@@ -1,30 +1,26 @@
-
 #include <iostream>
-#include <vector>
+#include <list> 
 using namespace std;
 
-vector<int> s;
+list<int> s;
 
 void push(int x) {
-    s.push_back(x);
+    s.push_front(x); // Thêm vào đầu list - O(1)
 }
-// O(1) trung bình
 
 void pop() {
     if (s.empty()) {
         cout << "Stack rong!\n";
         return;
     }
-    s.pop_back();
+    s.pop_front(); // Xóa ở đầu list - O(1)
 }
-// O(1)
 
 void display() {
-    for (int i = s.size() - 1; i >= 0; i--)
-        cout << s[i] << " ";
+    for (int x : s)
+        cout << x << " ";
     cout << '\n';
-}
-// O(n)
+} // O(n)
 
 int main() {
     int n, x;
