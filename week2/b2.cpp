@@ -1,77 +1,84 @@
+
 #include <iostream>
 using namespace std;
 
-struct SNode {
+struct Node{
     int data;
-    SNode* next;
+    Node *next;
 };
 
-class SinglyLinkedList {
-private:
-    SNode* head;
+Node *head=NULL;
 
-public:
-    SinglyLinkedList() : head(nullptr) {}
-
-    // 1. Chèn vào đầu danh sách - O(1)
-    void insertHead(int x) {
-        SNode* p = new SNode{x, head};
-        head = p;
+void insert(int x,int k){
+    Node *p=new Node{x,NULL};
+    if(k==0){
+        p->next=head;
+        head=p;
+        return;
     }
-
-    // 2. Chèn vào cuối danh sách - O(n) (hoặc O(1) nếu duy trì con trỏ tail)
-    void insertTail(int x) {
-        SNode* p = new SNode{x, nullptr};
-        if (head == nullptr) {
-            head = p;
-            return;
-        }
-        SNode* curr = head;
-        while (curr->next != nullptr) curr = curr->next;
-        curr->next = p;
-    }
-
-    // 3. Xóa phần tử ở đầu danh sách - O(1)
-    void deleteHead() {
-        if (head == nullptr) return;
-        SNode* p = head;
-        head = head->next;
+    Node *q=head;
+    for(int i=0;i<k-1&&q!=NULL;i++) q=q->next;
+    if(q==NULL){
+        cout<<"Vi tri khong hop le!\n";
         delete p;
+        return;
     }
+    p->next=q->next;
+    q->next=p;
+}
+// O(n)
 
-    // 4. Xóa phần tử đầu tiên có giá trị bằng x - O(n)
-    void deleteValue(int x) {
-        if (head == nullptr) return;
-        if (head->data == x) {
-            deleteHead();
-            return;
+void remove(int k){
+    if(head==NULL){
+        cout<<"Danh sach rong!\n";
+        return;
+    }
+    if(k==0){
+        Node *p=head;
+        head=head->next;
+        delete p;
+        return;
+    }
+    Node *q=head;
+    for(int i=0;i<k-1&&q!=NULL;i++) q=q->next;
+    if(q==NULL||q->next==NULL){
+        cout<<"Vi tri khong hop le!\n";
+        return;
+    }
+    Node *p=q->next;
+    q->next=p->next;
+    delete p;
+}
+// O(n)
+
+void display(){
+    Node *p=head;
+    while(p!=NULL){
+        cout<<p->data<<" ";
+        p=p->next;
+    }
+    cout<<endl;
+}
+// O(n)
+
+int main(){
+    int ch,x,k;
+    do{
+        cout<<"1. Them\n2. Xoa\n3. Hien thi\n0. Thoat\n";
+        cin>>ch;
+        if(ch==1){
+            cout<<"Nhap gia tri va vi tri: ";
+            cin>>x>>k;
+            if(k<0) cout<<"Vi tri khong hop le!\n";
+            else insert(x,k);
         }
-        SNode* curr = head;
-        while (curr->next != nullptr && curr->next->data != x)
-            curr = curr->next;
-
-        if (curr->next != nullptr) {
-            SNode* p = curr->next;
-            curr->next = p->next;
-            delete p;
+        else if(ch==2){
+            cout<<"Nhap vi tri can xoa: ";
+            cin>>k;
+            if(k<0) cout<<"Vi tri khong hop le!\n";
+            else remove(k);
         }
-    }
-
-    // 5. Tìm kiếm phần tử x - O(n)
-    bool search(int x) {
-        for (SNode* p = head; p != nullptr; p = p->next)
-            if (p->data == x) return true;
-        return false;
-    }
-
-    // 6. In danh sách - O(n)
-    void display() {
-        for (SNode* p = head; p != nullptr; p = p->next)
-            cout << p->data << " ";
-        cout << "\n";
-    }
-
-    ~SinglyLinkedList() {
-        while (head != nullptr) deleteHead();
-    }
-};
+        else if(ch==3) display();
+    }while(ch!=0);
+    return 0;
+}
