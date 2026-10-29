@@ -1,33 +1,52 @@
-
 #include <iostream>
-#include <vector>
 using namespace std;
 
-vector<int> q;
+struct Node {
+    int data;
+    Node *next;
+};
+
+Node *front = NULL, *rear = NULL;
 
 void enqueue(int x) {
-    q.push_back(x);
+    Node *p = new Node{x, NULL};
+
+    if (rear == NULL)
+        front = rear = p;
+    else {
+        rear->next = p;
+        rear = p;
+    }
 }
-// O(1) trung bình
+// O(1)
 
 void dequeue() {
-    if (q.empty()) {
+    if (front == NULL) {
         cout << "Queue rong!\n";
         return;
     }
-    q.erase(q.begin());
+
+    Node *p = front;
+    front = front->next;
+
+    if (front == NULL)
+        rear = NULL;
+
+    delete p;
 }
-// O(n)
+// O(1)
 
 void display() {
-    for (int x : q)
-        cout << x << " ";
+    for (Node *p = front; p != NULL; p = p->next)
+        cout << p->data << " ";
+
     cout << '\n';
 }
 // O(n)
 
 int main() {
     int n, x;
+
     cout << "Nhap so phan tu: ";
     cin >> n;
 
@@ -37,7 +56,11 @@ int main() {
     }
 
     display();
+
     dequeue();
+
     cout << "Sau khi dequeue: ";
     display();
+
+    return 0;
 }
