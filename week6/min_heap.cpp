@@ -13,7 +13,6 @@ void Insert(int a[], int &n, int x) {
 void Delete(int a[], int &n, int x) {
     int k = -1;
 
-    // B1: Tìm phần tử cần xóa
     for (int i = 0; i < n; i++) {
         if (a[i] == x) {
             k = i;
@@ -23,11 +22,9 @@ void Delete(int a[], int &n, int x) {
 
     if (k == -1) return;
 
-    // B2: Đổi với phần tử cuối và xóa
     swap(a[k], a[n - 1]);
     n--;
 
-    // B3: Kiểm tra với cha
     if (k > 0 && a[k] < a[(k - 1) / 2]) {
         while (k > 0 && a[k] < a[(k - 1) / 2]) {
             swap(a[k], a[(k - 1) / 2]);
@@ -35,7 +32,6 @@ void Delete(int a[], int &n, int x) {
         }
     }
     else {
-        // B4: Kiểm tra với con nhỏ nhất
         while (true) {
             int left = 2 * k + 1;
             int right = 2 * k + 2;
