@@ -18,16 +18,13 @@ void Heapify(int a[], int n, int i) {
 
 void HeapSort(int a[], int n) {
 
-    // B1: Xây dựng Max Heap
     for (int i = n / 2 - 1; i >= 0; i--) {
         Heapify(a, n, i);
     }
 
-    // B2: Đưa phần tử lớn nhất về cuối
     for (int i = n - 1; i > 0; i--) {
         swap(a[0], a[i]);
 
-        // B3: Điều chỉnh lại Heap
         Heapify(a, i, 0);
     }
 }
