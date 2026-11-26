@@ -19,15 +19,19 @@ public:
         return -1;
     }
 
-    void remove(string key) {
-        for (int i = 0; i < n; i++)
-            if (keys[i] == key) {
-                keys[i] = keys[n - 1];       // lấy phần tử cuối lấp vào chỗ trống
-                values[i] = values[n - 1];
-                n--;
-                return;
+   void remove(string key) {
+    for (int i = 0; i < n; i++) {
+        if (keys[i] == key) {
+            // Dịch các phần tử phía sau lên 1 vị trí
+            for (int j = i; j < n - 1; j++) {
+                keys[j] = keys[j + 1];
+                values[j] = values[j + 1];
             }
+            n--;
+            return;
+        }
     }
+}
 
     void print() {
         for (int i = 0; i < n; i++)
